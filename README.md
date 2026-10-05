@@ -13,8 +13,8 @@ Este projeto consiste no desenvolvimento de um **Sistema de Gestão de Alunos**,
 | Nome | RA / Matrícula | GitHub |
 | :--- | :---: | :--- |
 | [Guilherme Bauer] | `000000` | [@usuario](https://github.com/usuario) |
-| [Gustavo Godinho] | `000000` | [@gustavo-godinhounisul](https://github.com/gustavo-godinhounisul) |
-| [Juan Natan dos Passos] | `000000` | [@JuanNatan](https://github.com/JuanNatan) |
-| [Vitor Fabiano da Silva] | `000000` | [@silvavitooor](https://github.com/silvavitooor) |
-| [Vitor Steinbach] | `000000` | [@steinbachvitor](https://github.com/steinbachvitor) |
+| [Gustavo Godinho] | `10724268995` | [@gustavo-godinhounisul](https://github.com/gustavo-godinhounisul) |
+| [Juan Natan dos Passos] | `10724268997` | [@JuanNatan](https://github.com/JuanNatan) |
+| [Vitor Fabiano da Silva] | `10724262853` | [@silvavitooor](https://github.com/silvavitooor) |
+| [Vitor Steinbach] | `10724268585` | [@steinbachvitor](https://github.com/steinbachvitor) |
 
