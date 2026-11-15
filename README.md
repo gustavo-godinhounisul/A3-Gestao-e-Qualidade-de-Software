@@ -207,7 +207,7 @@ A3-Gestao-e-Qualidade-de-Software/
 
 | Nome | RA / Matrícula | GitHub | Perfil |
 |---|---|---|---|
-| Guilherme Bauer | PREENCHER | PREENCHER | PREENCHER |
+| Guilherme Bauer | 10724268566 | https://github.com/GuiBauer06 | PREENCHER |
 | Gustavo Godinho | 10724268995 | [@gustavo-godinhounisul](https://github.com/gustavo-godinhounisul) | PREENCHER |
 | Juan Natan dos Passos | 10724268997 | [@JuanNatan](https://github.com/JuanNatan) | PREENCHER |
 | Vitor Fabiano da Silva | 10724262853 | [@silvavitooor](https://github.com/silvavitooor) | PREENCHER |
