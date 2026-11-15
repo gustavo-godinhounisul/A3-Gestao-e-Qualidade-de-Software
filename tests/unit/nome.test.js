@@ -21,4 +21,10 @@ describe("validarNome (RF01)", () => {
   it("rejeita nome longo demais", () => {
     expect(validarNome("a".repeat(101))).toBe(false);
   });
+  
+  it("rejeita o que não é texto", () => {
+    expect(validarNome(null)).toBe(false);
+    expect(validarNome(123)).toBe(false);
+  });
+  
 });

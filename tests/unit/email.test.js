@@ -17,4 +17,10 @@ describe("validarEmail (RF01)", () => {
   it("rejeita e-mail com espaços", () => {
     expect(validarEmail("juan @exemplo.com")).toBe(false);
   });
+  
+  it("rejeita o que não é texto", () => {
+    expect(validarEmail(null)).toBe(false);
+    expect(validarEmail(123)).toBe(false);
+  });  
+  
 });
