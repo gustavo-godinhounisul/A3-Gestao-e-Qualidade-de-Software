@@ -1,0 +1,12 @@
+/* Estilo inicial simples */
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.aluno-linha {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
