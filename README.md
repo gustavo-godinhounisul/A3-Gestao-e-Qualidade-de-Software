@@ -222,8 +222,8 @@ Cada linha liga um integrante à sua funcionalidade, ao Pull Request (ou commits
 | Vitor Fabiano da Silva | Estrutura do projeto, RN02 (nota) e pipeline de CI | PREENCHER | [nota.test.js](tests/unit/nota.test.js) | ✅ Feito |
 | Vitor Fabiano da Silva | Repositório de alunos (persistência) | PREENCHER | `tests/integration/alunoRepository.test.js` | ⬜ Onda 1 |
 | Vitor Fabiano da Silva | Testes do fluxo completo e cobertura inicial | PREENCHER | `tests/integration/fluxo.test.js` | ⬜ Onda 2 |
-| Gustavo Godinho | Busca de alunos (RF02) | PREENCHER | `tests/unit/busca.test.js` | ⬜ Onda 1 |
-| Gustavo Godinho | ESLint e proteção do `main` (quality gate) | PREENCHER | Execução no CI | ⬜ Onda 1 |
+| Gustavo Godinho | Busca de alunos (RF02) | [#8](https://github.com/gustavo-godinhounisul/A3-Gestao-e-Qualidade-de-Software/pull/8) | tests/unit/busca.test.js | ✅ Feito |
+| Gustavo Godinho | ESLint e proteção do main (quality gate) | [#7](https://github.com/gustavo-godinhounisul/A3-Gestao-e-Qualidade-de-Software/pull/7) | Execução no CI | ✅ Feito |
 | Gustavo Godinho | Teste de sistema (fluxo cadastrar e buscar) | PREENCHER | PREENCHER | ⬜ Onda 2 |
 | Guilherme Bauer | Licença (`LICENSE`) | PREENCHER | Não se aplica | ⬜ Onda 1 |
 | Guilherme Bauer | Validação de CPF (RN01) | PREENCHER | `tests/unit/cpf.test.js` | ⬜ Onda 1 |
