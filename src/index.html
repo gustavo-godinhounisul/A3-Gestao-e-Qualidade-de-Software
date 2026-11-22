@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão de Alunos</title>
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+    <main class="container">
+        <h1>Sistema de Gestão de Alunos</h1>
+
+        <section class="secao">
+            <h2>Cadastrar Aluno</h2>
+            <form id="form-cadastro" novalidate>
+                <div class="campo">
+                    <label for="nome">Nome</label>
+                    <input id="nome" name="nome" type="text" placeholder="Nome completo" required>
+                </div>
+
+                <div class="campo">
+                    <label for="cpf">CPF</label>
+                    <input id="cpf" name="cpf" type="text" placeholder="000.000.000-00" required>
+                </div>
+
+                <div class="campo">
+                    <label for="email">E-mail</label>
+                    <input id="email" name="email" type="email" placeholder="aluno@email.com" required>
+                </div>
+
+                <button type="submit">Cadastrar</button>
+            </form>
+
+            <div id="mensagens" class="mensagens" role="alert" aria-live="polite"></div>
+        </section>
+
+        <section class="secao">
+            <h2>Alunos Cadastrados</h2>
+            <div class="campo">
+                <label for="busca">Buscar aluno</label>
+                <input id="busca" type="search" placeholder="Buscar por nome ou CPF...">
+            </div>
+            <div id="container-alunos"></div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { criarAlunoRepository } from './js/repositories/alunoRepository.js';
+        import { cadastrarAluno } from './js/services/cadastroService.js';
+        import { filtrarAlunos } from './js/domain/busca.js';
+        import { inicializarTela } from './js/ui/formulario.js';
+
+        const repositorio = criarAlunoRepository(window.localStorage);
+
+        inicializarTela({
+            formulario: document.getElementById('form-cadastro'),
+            campoBusca: document.getElementById('busca'),
+            containerMensagens: document.getElementById('mensagens'),
+            containerLista: document.getElementById('container-alunos'),
+            repositorio,
+            cadastrarAluno,
+            filtrarAlunos
+        });
+    </script>
+</body>
+</html>
