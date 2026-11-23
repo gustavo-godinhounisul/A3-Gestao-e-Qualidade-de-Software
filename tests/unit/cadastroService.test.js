@@ -82,4 +82,24 @@ describe("cadastrarAluno (RF01)", () => {
     expect(resultado.erros).toHaveLength(3);
     expect(repositorio.listar()).toHaveLength(0);
   });
+  
+  it("rejeita CPF duplicado, mesmo com máscara diferente", () => {
+    const repositorio = criarAlunoRepository(criarArmazenamentoFalso());
+
+    cadastrarAluno(repositorio, {
+      nome: "Maria da Silva",
+      cpf: "123.456.789-09",
+      email: "maria@exemplo.com",
+    });
+
+    const resultado = cadastrarAluno(repositorio, {
+      nome: "João Souza",
+      cpf: "12345678909",
+      email: "joao@exemplo.com",
+    });
+
+    expect(resultado.ok).toBe(false);
+    expect(resultado.erros).toEqual(["CPF já cadastrado."]);
+    expect(repositorio.listar()).toHaveLength(1);
+  });
 });
