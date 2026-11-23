@@ -26,4 +26,60 @@ describe("cadastrarAluno (RF01)", () => {
     expect(resultado.aluno.cpf).toBe("12345678909");
     expect(repositorio.listar()).toHaveLength(1);
   });
+  
+  it("rejeita CPF inválido e não salva", () => {
+    const repositorio = criarAlunoRepository(criarArmazenamentoFalso());
+
+    const resultado = cadastrarAluno(repositorio, {
+      nome: "Maria da Silva",
+      cpf: "123.456.789-00",
+      email: "maria@exemplo.com",
+    });
+
+    expect(resultado.ok).toBe(false);
+    expect(resultado.erros).toEqual(["CPF inválido."]);
+    expect(repositorio.listar()).toHaveLength(0);
+  });
+
+  it("rejeita nome inválido e não salva", () => {
+    const repositorio = criarAlunoRepository(criarArmazenamentoFalso());
+
+    const resultado = cadastrarAluno(repositorio, {
+      nome: "Jo",
+      cpf: "123.456.789-09",
+      email: "maria@exemplo.com",
+    });
+
+    expect(resultado.ok).toBe(false);
+    expect(resultado.erros).toEqual(["Nome inválido: use de 3 a 100 caracteres."]);
+    expect(repositorio.listar()).toHaveLength(0);
+  });
+
+  it("rejeita e-mail inválido e não salva", () => {
+    const repositorio = criarAlunoRepository(criarArmazenamentoFalso());
+
+    const resultado = cadastrarAluno(repositorio, {
+      nome: "Maria da Silva",
+      cpf: "123.456.789-09",
+      email: "mariaexemplo.com",
+    });
+
+    expect(resultado.ok).toBe(false);
+    expect(resultado.erros).toEqual(["E-mail inválido."]);
+    expect(repositorio.listar()).toHaveLength(0);
+  });
+
+  it("devolve todos os erros de uma vez e não salva nada", () => {
+    const repositorio = criarAlunoRepository(criarArmazenamentoFalso());
+
+    const resultado = cadastrarAluno(repositorio, {
+      nome: "",
+      cpf: "111.111.111-11",
+      email: "",
+    });
+
+    expect(resultado.ok).toBe(false);
+    expect(resultado.erros).toHaveLength(3);
+    expect(repositorio.listar()).toHaveLength(0);
+  });
 });
