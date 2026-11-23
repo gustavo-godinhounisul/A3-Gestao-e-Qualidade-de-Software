@@ -4,6 +4,7 @@ import { validarCpf, normalizarCpf } from "../domain/cpf.js";
 
 export function cadastrarAluno(repositorio, dados) {
   const erros = [];
+  const cpf = normalizarCpf(dados.cpf);
 
   if (!validarNome(dados.nome)) {
     erros.push("Nome inválido: use de 3 a 100 caracteres.");
@@ -13,6 +14,8 @@ export function cadastrarAluno(repositorio, dados) {
   }
   if (!validarCpf(dados.cpf)) {
     erros.push("CPF inválido.");
+  } else if (repositorio.buscarPorCpf(cpf) !== null) {
+    erros.push("CPF já cadastrado.");
   }
 
   if (erros.length > 0) {
@@ -21,7 +24,7 @@ export function cadastrarAluno(repositorio, dados) {
 
   const aluno = repositorio.salvar({
     nome: dados.nome.trim(),
-    cpf: normalizarCpf(dados.cpf),
+    cpf,
     email: dados.email,
   });
   return { ok: true, aluno };
