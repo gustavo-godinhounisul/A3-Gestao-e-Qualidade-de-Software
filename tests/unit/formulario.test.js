@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+/* global Event */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { inicializarTela, exibirMensagens } from '../../src/js/ui/formulario.js';
 
