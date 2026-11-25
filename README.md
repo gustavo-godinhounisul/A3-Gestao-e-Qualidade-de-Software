@@ -54,7 +54,7 @@ Quando o cadastro de alunos é feito em papel ou em planilhas soltas, é comum h
 |---|---|---|
 | **RN01** | **CPF válido e único** | **Foco desta etapa** |
 | RN02 | A nota deve estar entre 0,0 e 10,0 | Implementada (`src/js/domain/nota.js`) |
-| RN03 | O aluno é aprovado se a média for **maior ou igual a 7,0** | Planejada (fase de notas) |
+| RN03 | O aluno é aprovado se a média for **maior ou igual a 7,0** | Implementada (`src/js/domain/situacao.js`); será usada na fase de notas |
 | RN04 | A matrícula não pode exceder as vagas do curso | Planejada |
 | RN05 | O aluno não pode ter matrícula duplicada no mesmo curso | Planejada |
 | RN06 | Aluno ou curso com vínculos só pode ser inativado, nunca excluído | Planejada |
@@ -66,6 +66,12 @@ Quando o cadastro de alunos é feito em papel ou em planilhas soltas, é comum h
 - Deve ter exatamente 11 dígitos e os dígitos verificadores corretos.
 - Sequências de números iguais (como `111.111.111-11`) são rejeitadas.
 - Não pode existir outro aluno com o mesmo CPF.
+
+**Detalhe da RN03:**
+
+- Média maior ou igual a 7,0 resulta em `aprovado`; abaixo disso, em `reprovado`.
+- A média precisa estar entre 0 e 10 (reaproveita a RN02); fora dessa faixa, ou se não for número, a função lança `RangeError`.
+- O valor mínimo fica na constante `MEDIA_MINIMA`, em um único lugar do código.
 
 ### Requisitos de qualidade
 
@@ -118,23 +124,23 @@ Critérios planejados para a fase de notas:
 | Em uso | HTML5, CSS3 e JavaScript (ES Modules) | Sistema web, sem back-end; dados guardados no navegador |
 | Em uso | Node.js (versão LTS atual) | Apenas para rodar as ferramentas de desenvolvimento |
 | Em uso | Vitest e `@vitest/coverage-v8` | Testes automatizados e medição de cobertura |
+| Em uso | jsdom | Simular o navegador nos testes da tela |
+| Em uso | ESLint | Análise estática |
 | Em uso | Git e GitHub | Controle de versão |
 | Em uso | GitHub Actions | Integração contínua (testes e cobertura a cada envio) |
-| Planejado | ESLint | Análise estática |
-| Planejado | jsdom | Simular o navegador nos testes da tela |
 | Planejado | Playwright | Teste de sistema (fluxo completo no navegador) |
 | Planejado | Figma | Protótipo das telas |
 | Se o professor exigir | SonarCloud | *Quality gate* no formato do SonarCloud |
 
 ## 🚦 Quality gate
 
-O *quality gate* do grupo é o próprio pipeline de CI, exigido para juntar qualquer Pull Request ao `main`:
+O *quality gate* do grupo é o próprio pipeline de CI, que roda em cada Pull Request:
 
 1. **ESLint** sem erros (análise estática).
 2. **Testes** unitários e de integração passando.
 3. **Cobertura** de pelo menos 75% (o comando falha abaixo disso).
 
-A proteção do `main`, que bloqueia a junção quando o pipeline falha, está em configuração pelo dono do repositório. Quando estiver ativa, o print de um Pull Request bloqueado por falha será guardado aqui como evidência.
+A proteção do `main` está ativa: a junção de um Pull Request fica bloqueada até haver pelo menos 1 aprovação de revisão, e o resultado do CI aparece em cada PR. O print de um Pull Request bloqueado por falha será guardado aqui como evidência.
 
 | Evidência | Link |
 |---|---|
@@ -188,18 +194,31 @@ Mínimo exigido: **75%**.
 A3-Gestao-e-Qualidade-de-Software/
 ├── .github/workflows/ci.yml   # pipeline: testes e cobertura a cada envio
 ├── src/
-│   ├── index.html             # (planejado) página principal
+│   ├── index.html             # página principal
+│   ├── css/
+│   │   └── estilo.css
 │   └── js/
-│       ├── domain/            # regras de negócio puras (ex.: nota.js)
-│       ├── services/          # (planejado) casos de uso: cadastrar, editar
-│       ├── repositories/      # (planejado) guardar e buscar dados
-│       └── ui/                # (planejado) telas e eventos
+│       ├── domain/            # regras de negócio puras
+│       │   ├── busca.js       # filtrarAlunos (RF02)
+│       │   ├── cpf.js         # validação de CPF (RN01)
+│       │   ├── email.js       # validação de e-mail
+│       │   ├── nome.js        # validação de nome
+│       │   ├── nota.js        # nota de 0 a 10 (RN02)
+│       │   └── situacao.js    # aprovado ou reprovado (RN03)
+│       ├── services/          # (em revisão) casos de uso: cadastrar, editar
+│       ├── repositories/
+│       │   └── alunoRepository.js   # guardar e buscar alunos
+│       └── ui/
+│           └── lista.js       # listagem de alunos na tela
 ├── tests/
-│   ├── unit/                  # testes unitários (ex.: nota.test.js)
-│   └── integration/           # (planejado) testes de integração
+│   ├── unit/                  # testes unitários de cada regra e da tela
+│   └── integration/
+│       ├── alunoRepository.test.js
+│       └── fluxo.test.js      # fluxo de cadastro e consulta
+├── eslint.config.js           # regras de análise estática
 ├── vitest.config.js           # configuração dos testes e limite de 75%
 ├── package.json
-├── LICENSE                    # (planejado)
+├── LICENSE
 └── README.md
 ```
 
@@ -207,11 +226,23 @@ A3-Gestao-e-Qualidade-de-Software/
 
 | Nome | RA / Matrícula | GitHub | Perfil |
 |---|---|---|---|
-| Guilherme Bauer | 10724268566 | https://github.com/GuiBauer06 | PREENCHER |
+| Guilherme Bauer | 10724268566 | [@GuiBauer06](https://github.com/GuiBauer06) | PREENCHER |
 | Gustavo Godinho | 10724268995 | [@gustavo-godinhounisul](https://github.com/gustavo-godinhounisul) | PREENCHER |
 | Juan Natan dos Passos | 10724268997 | [@JuanNatan](https://github.com/JuanNatan) | PREENCHER |
-| Vitor Fabiano da Silva | 10724262853 | [@silvavitooor](https://github.com/silvavitooor) | PREENCHER |
+| Vitor Fabiano da Silva | 10724262853 | [@silvavitooor](https://github.com/silvavitooor) | Estrutura do projeto, pipeline de CI e cobertura, camada de persistência (repositório de alunos), testes de integração do fluxo e regra de situação do aluno (RN03) |
 | Vitor Steinbach | 10724268585 | [@steinbachvitor](https://github.com/steinbachvitor) | PREENCHER |
+
+## 🔎 Rastreabilidade: requisito para testes
+
+| Requisito ou critério | Testes |
+|---|---|
+| RN01: CPF válido e único | [cpf.test.js](tests/unit/cpf.test.js); CA02 e CA03 em [fluxo.test.js](tests/integration/fluxo.test.js) |
+| RN02: nota de 0 a 10 | [nota.test.js](tests/unit/nota.test.js) |
+| RN03: situação do aluno (média mínima 7,0) | [situacao.test.js](tests/unit/situacao.test.js) |
+| RF01: cadastro (CA01 a CA03) | [fluxo.test.js](tests/integration/fluxo.test.js); [nome.test.js](tests/unit/nome.test.js) e [email.test.js](tests/unit/email.test.js) |
+| RF02: consulta e busca (CA04 e CA05) | [busca.test.js](tests/unit/busca.test.js); [fluxo.test.js](tests/integration/fluxo.test.js); [lista.test.js](tests/unit/lista.test.js) |
+| Persistência dos dados | [alunoRepository.test.js](tests/integration/alunoRepository.test.js); teste de recarga em [fluxo.test.js](tests/integration/fluxo.test.js) |
+| RF03: edição (CA06) | Pendente: entra quando o serviço de edição for juntado |
 
 ## 🧩 Responsáveis por funcionalidade
 
@@ -220,8 +251,10 @@ Cada linha liga um integrante à sua funcionalidade, ao Pull Request (ou commits
 | Integrante | Funcionalidade | Código (PR / commits) | Testes | Situação |
 |---|---|---|---|---|
 | Vitor Fabiano da Silva | Estrutura do projeto, RN02 (nota) e pipeline de CI | PREENCHER | [nota.test.js](tests/unit/nota.test.js) | ✅ Feito |
-| Vitor Fabiano da Silva | Repositório de alunos (persistência) | PREENCHER | `tests/integration/alunoRepository.test.js` | ⬜ Onda 1 |
-| Vitor Fabiano da Silva | Testes do fluxo completo e cobertura inicial | PREENCHER | `tests/integration/fluxo.test.js` | ⬜ Onda 2 |
+| Vitor Fabiano da Silva | Repositório de alunos (persistência) | PREENCHER | [alunoRepository.test.js](tests/integration/alunoRepository.test.js) | ✅ Feito |
+| Vitor Fabiano da Silva | Testes do fluxo de cadastro e consulta | PREENCHER | [fluxo.test.js](tests/integration/fluxo.test.js) | ✅ Feito (a edição, CA06, entra com o RF03) |
+| Vitor Fabiano da Silva | Situação do aluno (RN03) | PREENCHER | [situacao.test.js](tests/unit/situacao.test.js) | ✅ Feito |
+| Vitor Fabiano da Silva | Cobertura inicial publicada | PREENCHER | Execução no CI | 🚧 Em andamento |
 | Gustavo Godinho | Busca de alunos (RF02) | [#8](https://github.com/gustavo-godinhounisul/A3-Gestao-e-Qualidade-de-Software/pull/8) | tests/unit/busca.test.js | ✅ Feito |
 | Gustavo Godinho | ESLint e proteção do main (quality gate) | [#7](https://github.com/gustavo-godinhounisul/A3-Gestao-e-Qualidade-de-Software/pull/7) | Execução no CI | ✅ Feito |
 | Gustavo Godinho | Teste de sistema (fluxo cadastrar e buscar) | PREENCHER | PREENCHER | ⬜ Onda 2 |
@@ -238,9 +271,9 @@ Cada linha liga um integrante à sua funcionalidade, ao Pull Request (ou commits
 | Entrega | Prazo | Situação |
 |---|---|---|
 | README atualizado, licença e requisitos com critérios de aceitação | PREENCHER | 🚧 Em andamento |
-| Onda 1: regras (CPF, nome, e-mail, busca), repositório, tela de listagem e ESLint, com testes | PREENCHER | ⬜ |
-| Onda 2: cadastro, edição, formulário, `npm start` e testes do fluxo completo | PREENCHER | ⬜ |
-| Cobertura inicial publicada e tabela de responsáveis com links dos PRs e testes | PREENCHER | ⬜ |
+| Onda 1: regras (CPF, nome, e-mail, busca), repositório, tela de listagem e ESLint, com testes | PREENCHER | 🟡 Concluída no código; links dos PRs em preenchimento |
+| Onda 2: cadastro, edição, formulário, `npm start` e testes do fluxo completo | PREENCHER | 🚧 Em andamento (cadastro e formulário em revisão; edição pendente) |
+| Cobertura inicial publicada e tabela de responsáveis com links dos PRs e testes | PREENCHER | 🚧 Em andamento |
 
 ## 🤝 Como contribuir
 
